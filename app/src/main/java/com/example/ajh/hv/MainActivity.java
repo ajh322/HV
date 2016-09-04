@@ -33,6 +33,8 @@ import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity {
 
+    String ID;
+    String PW;
     static int number;
     static Runnable r = new thread_get();
     static Document doc2;
@@ -41,6 +43,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Intent intent = getIntent();
+        ID = intent.getExtras().getString("ID");
+        PW = intent.getExtras().getString("PW");
+        System.out.println("LOGIN!:"+ID+PW);
         thread_login.start();
         GET_new();
         GET_lefts();
@@ -53,8 +59,8 @@ public class MainActivity extends AppCompatActivity {
                 Connection.Response res = Jsoup
                         .connect("https://forums.e-hentai.org/index.php?act=Login&CODE=01")
                         .timeout(5000)
-                        .data("UserName", "an4210")
-                        .data("PassWord", "dkswlghks322")
+                        .data("UserName", ID)
+                        .data("PassWord", PW)
                         .data("ipb_login_submit", "Login!")
                         .data("ipb_login_submit", "Login!")
                         .data("b", "d")
@@ -622,6 +628,8 @@ public class MainActivity extends AppCompatActivity {
     }
     public static class Data implements Serializable{
         Map<String, String> cookies;
+        String ID;
+        String PASSWORD;
         String MAX_HP;
         String NOW_HP;
         String MAX_MP;
