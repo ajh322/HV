@@ -3,6 +3,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -33,20 +34,28 @@ import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity {
 
-    String ID;
-    String PW;
+    SharedPreferences setting;
+    static SharedPreferences.Editor editor;
     static int number;
     static Runnable r = new thread_get();
     static Document doc2;
     public static Data data = new Data();
+    private static Context Context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Context = this;
+        setting = getSharedPreferences("setting", 0);
+        editor= setting.edit();
         Intent intent = getIntent();
-        ID = intent.getExtras().getString("ID");
-        PW = intent.getExtras().getString("PW");
-        System.out.println("LOGIN!:"+ID+PW);
+        try{
+        String ID=intent.getExtras().getString("ID");
+        String PW=intent.getExtras().getString("PW");
+        data.ID=ID;
+        data.PW=PW;
+        }
+        catch (Exception e) {}
         thread_login.start();
         GET_new();
         GET_lefts();
@@ -59,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
                 Connection.Response res = Jsoup
                         .connect("https://forums.e-hentai.org/index.php?act=Login&CODE=01")
                         .timeout(5000)
-                        .data("UserName", ID)
-                        .data("PassWord", PW)
+                        .data("UserName", data.ID)
+                        .data("PassWord", data.PW)
                         .data("ipb_login_submit", "Login!")
                         .data("ipb_login_submit", "Login!")
                         .data("b", "d")
@@ -83,8 +92,21 @@ public class MainActivity extends AppCompatActivity {
     }
     public static void GET_lefts()
     {
-        Get_HP_MP_SP();
-        Get_lefts_5_things();
+        try {
+            Get_HP_MP_SP();
+            Get_lefts_5_things();
+        }
+        catch (Exception e)
+        {
+            //여기다가 로그인 실패하였으므로 데이터 초기화하고 로그인 액티비티로 다시 전환
+            editor.remove("ID");
+            editor.remove("PW");
+            editor.remove("AUTO");
+            editor.clear();
+            editor.commit();
+            System.out.println(e);
+            re_Login(Context);
+        }
     }
     public static String GET_middles()
     {
@@ -101,7 +123,11 @@ public class MainActivity extends AppCompatActivity {
 
         return str;
     }
-
+    public static void re_Login(Context mContext) { //스태틱 메쏘드에서 인텐트를 사용해야할때 이런식으로 해야함.
+        Toast.makeText(mContext, "Login failed!",Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(mContext, Login.class);
+        mContext.startActivity(intent);
+    }
     public static void Riddle(Context mContext) { //스태틱 메쏘드에서 인텐트를 사용해야할때 이런식으로 해야함.
         Toast.makeText(mContext, "Time to solve the riddle!",Toast.LENGTH_SHORT).show();
         Intent riddle = new Intent(mContext, RiddleMaster.class);
@@ -629,7 +655,7 @@ public class MainActivity extends AppCompatActivity {
     public static class Data implements Serializable{
         Map<String, String> cookies;
         String ID;
-        String PASSWORD;
+        String PW;
         String MAX_HP;
         String NOW_HP;
         String MAX_MP;
@@ -653,17 +679,5 @@ public class MainActivity extends AppCompatActivity {
             Waiting=0;
         }
 
-    }
-}
-class MyApp extends Application {
-
-    private static Context mContext;
-
-    public void onCreate(){
-        mContext = this.getApplicationContext();
-    }
-
-    public static Context getAppContext(){
-        return mContext;
     }
 }
