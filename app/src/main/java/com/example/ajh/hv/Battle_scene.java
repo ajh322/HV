@@ -343,7 +343,7 @@ public class Battle_scene extends Activity implements View.OnClickListener{
                     if(str_bottoms[i][2]=="false")
                         skill_icons[i].setImageAlpha(50);
                     else
-                        skill_icons[i].setImageAlpha(100);
+                        skill_icons[i].setImageAlpha(255);
                 }
             }
         else
