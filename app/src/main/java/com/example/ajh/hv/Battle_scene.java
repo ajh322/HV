@@ -122,15 +122,15 @@ public class Battle_scene extends Activity implements View.OnClickListener{
         monster_number=MainActivity.number;
         if(MainActivity.data.IS_FIGHTING==true) //이미 전투중
         {
-            monster_layouts = new LinearLayout[monster_number];
-            thing_layouts = new LinearLayout[monster_number];
-            monsters_textview_alpha = new TextView[monster_number];
-            monsters_textview_name = new TextView[monster_number];
-            monsters_HP = new ProgressBar[monster_number];
-            monsters_MP = new ProgressBar[monster_number];
+            monster_layouts = new LinearLayout[10];
+            thing_layouts = new LinearLayout[10];
+            monsters_textview_alpha = new TextView[10];
+            monsters_textview_name = new TextView[10];
+            monsters_HP = new ProgressBar[10];
+            monsters_MP = new ProgressBar[10];
 
 
-            for(int i = 0; i < monster_number; i++) { //monsters 디스플레이
+            for(int i = 0; i < 10; i++) { //monsters 디스플레이
                 GradientDrawable drawable = new GradientDrawable();
                 drawable.setShape(GradientDrawable.RECTANGLE);
                 drawable.setStroke(3, Color.WHITE);
@@ -272,7 +272,10 @@ public class Battle_scene extends Activity implements View.OnClickListener{
                 monsters_HP[i].setProgress((Integer.parseInt(str_rights[i][2])*100)/120);
                 monsters_MP[i].setProgress((Integer.parseInt(str_rights[i][3])/100)/120);
             }
-
+            for(int i=monster_number;i<10;i++)
+            {
+                monster_layouts[i].setVisibility(View.GONE);
+            }
             str_bottoms=MainActivity.Get_bottoms();
             for(int i=0; i<22;i++)
             {
@@ -305,13 +308,6 @@ public class Battle_scene extends Activity implements View.OnClickListener{
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }
-        for(int i=0;i<monster_number;i++)
-        {
-            monsters_textview_alpha[i].setText(str_rights[i][0]);
-            monsters_textview_name[i].setText(str_rights[i][1]);
-            monsters_HP[i].setProgress(Integer.parseInt(str_rights[i][2])*100/120);
-            monsters_MP[i].setProgress(Integer.parseInt(str_rights[i][3])*100/120);
-        }
     }
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public void get_some()
@@ -334,6 +330,14 @@ public class Battle_scene extends Activity implements View.OnClickListener{
                 CREDIT.setText("Credit:"+MainActivity.data.Credit);
                 MID_TEXT.setText(MainActivity.GET_middles());
                 monster_number=MainActivity.number;
+                System.out.println(monster_number);
+                for(int i=0;i<10;i++)
+                {
+                    if(i<monster_number)
+                        monster_layouts[i].setVisibility(View.VISIBLE);
+                    if(i>=monster_number)
+                        monster_layouts[i].setVisibility(View.GONE);
+                }
                 for(int i=0;i<monster_number;i++)
                 {
                     monsters_textview_alpha[i].setText(str_rights[i][0]);
@@ -371,11 +375,6 @@ public class Battle_scene extends Activity implements View.OnClickListener{
         {
             HPS+=Integer.parseInt(A[2]);
             System.out.println("A[2]:"+Integer.parseInt(A[2])+"      HPS:"+HPS);
-        }
-        if(HPS==0) //다죽음 인텐트 재시작
-        {
-            finish();
-            startActivity(getIntent());
         }
     }
     @Override
