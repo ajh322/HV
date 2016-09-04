@@ -308,7 +308,7 @@ public class Battle_scene extends Activity implements View.OnClickListener{
         MainActivity.GET_lefts();
         str_rights = MainActivity.GET_rights(mContext);
         System.out.println("size:"+str_rights.length);
-        Check_end();
+        //Check_end();
         if(MainActivity.data.IS_FIGHTING==true)
             {
                 HP.setText("HP: "+MainActivity.data.NOW_HP+" / "+MainActivity.data.MAX_HP);
