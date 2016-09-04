@@ -46,6 +46,7 @@ public class Battle_scene extends Activity implements View.OnClickListener{
     LinearLayout[] monster_layouts;
     LinearLayout[] thing_layouts;
     LinearLayout[] skill_layouts;
+    ImageView[] skill_icons;
     TextView[] monsters_textview_alpha;
     TextView[] monsters_textview_name;
     ProgressBar[] monsters_HP;
@@ -88,6 +89,7 @@ public class Battle_scene extends Activity implements View.OnClickListener{
             //return;
         }
         skill_layouts = new LinearLayout[22];
+        skill_icons = new ImageView[22];
         for(int i = 0; i < 22; i++) //bottoms 디스플레이
         {
             GradientDrawable drawable = new GradientDrawable();
@@ -277,29 +279,19 @@ public class Battle_scene extends Activity implements View.OnClickListener{
                 monster_layouts[i].setVisibility(View.GONE);
             }
             str_bottoms=MainActivity.Get_bottoms();
+            LinearLayout.LayoutParams childParam2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
             for(int i=0; i<22;i++)
             {
-                ImageView img = new ImageView(this);
-                LinearLayout.LayoutParams childParam2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
-                img.setLayoutParams(childParam2);
-                img.setPadding(0,1,0,6);
+                skill_icons[i] = new ImageView(this);
+                skill_icons[i].setLayoutParams(childParam2);
+                skill_icons[i].setPadding(0,1,0,6);
                 if(str_bottoms[i][2]=="false")
-                    img.setImageAlpha(50);
-                img.setImageDrawable(MainActivity.fetchImage(str_bottoms[i][6]));
+                    skill_icons[i].setImageAlpha(50);
+                skill_icons[i].setImageDrawable(MainActivity.fetchImage(str_bottoms[i][6]));
                 try {
-                    skill_layouts[i].addView(img);
+                    skill_layouts[i].addView(skill_icons[i]);
                 }
                 catch (Exception e) { System.out.println(e); }
-            }
-            int HPS=0;
-            for(String[] A : str_rights)
-            {
-                HPS+=Integer.parseInt(A[2]);
-            }
-            if(HPS==0) //다죽음 인텐트 재시작
-            {
-                finish();
-                startActivity(getIntent());
             }
         }
         else
@@ -348,17 +340,8 @@ public class Battle_scene extends Activity implements View.OnClickListener{
                 str_bottoms=MainActivity.Get_bottoms();
                 for(int i=0; i<22;i++)
                 {
-                    ImageView img = new ImageView(this);
-                    LinearLayout.LayoutParams childParam2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
-                    img.setLayoutParams(childParam2);
-                    img.setPadding(0,1,0,6);
                     if(str_bottoms[i][2]=="false")
-                        img.setImageAlpha(50);
-                    img.setImageDrawable(MainActivity.fetchImage(str_bottoms[i][6]));
-                    try {
-                        skill_layouts[i].addView(img);
-                    }
-                    catch (Exception e) { System.out.println(e); }
+                        skill_icons[i].setImageAlpha(50);
                 }
             }
         else
