@@ -421,6 +421,11 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent_char);
                 finish();
                 break;
+            case R.id.button3:
+                Intent intent = new Intent(this,Donation.class);
+                startActivity(intent);
+                finish();
+                break;
             case R.id.id_gr:
                 if(data.IS_FIGHTING==true)
                 {

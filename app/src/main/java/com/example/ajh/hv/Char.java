@@ -22,6 +22,11 @@ public class Char extends AppCompatActivity {
         MP.setText("MP: "+data.NOW_MP+" / "+data.MAX_MP);
         SP.setText("SP: "+data.NOW_SP+" / "+data.MAX_SP);
     }
+    public void onBackPressed() {
+        finish();
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
     public void onClick(View v)
     {
         switch (v.getId()) {
